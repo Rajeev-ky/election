@@ -4,3 +4,6 @@
 .Ruserdata
 
 *Rproj
+rsconnect
+*_files
+*_cache
