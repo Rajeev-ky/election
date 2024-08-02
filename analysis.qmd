@@ -41,6 +41,30 @@ fit_elec_2 <- brm(formula = death_age ~ treatment + win_margin
 ```
 
 
+```{r}
+
+ndata <- tibble(expand_grid(treatment = c("win", "lose"), 
+                            party = c("Democrat", "Republican", "Third party"),
+                            win_margin = 0))
+
+fit_elec_2 |>
+  add_epred_draws(newdata = ndata) |> 
+  ungroup() |>
+  select(treatment, party, .epred) |> 
+  ggplot(aes(x = .epred, 
+             y = factor(party, levels = c("Third party", "Republican", "Democrat"), ordered = TRUE))) +
+    stat_slab(aes(fill = treatment),
+              position = 'dodge') +
+    labs(
+        title = "Expected Lifespan Given Election Outcome",
+        subtitle = "Winning is associated with about 8 extra years",
+        x = "Expected Lifespan",
+        y = NULL,
+        fill = "Election Result") +
+    scale_y_discrete(expand = expansion(mult = c(0.1, 0.4)))
+```
+
+
 $$death\_age = \beta_{0} + \beta_{1} treatment_i + \beta_{2}win\_margin_i + \\
 \beta_{4}repub_i + \beta_{5}thirdparty_i + \epsilon_{i}$$
 
